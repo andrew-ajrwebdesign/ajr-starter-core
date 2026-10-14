@@ -1,0 +1,34 @@
+# ⛔ vendor/ is ignored ON PURPOSE, and it is load-bearing.
+#
+# This plugin has zero runtime dependencies and ships a guarded PSR-4 fallback autoloader,
+# so an FTP upload or a fresh clone works with no build step. If vendor/ is ever committed,
+# `is_readable(vendor/autoload.php)` becomes true on every clone, the fallback never runs,
+# and a stale committed classmap ships to client sites instead.
+/vendor/
+composer.lock
+
+# Secrets and dumps. This scaffold is forked per client; a migration dump or an export zip
+# dropped in the folder with no rule here is how a client database reaches a public repo.
+.env
+.env.*
+*.key
+*.pem
+*.sql
+*.sql.gz
+*.zip
+*.tar.gz
+
+# Build output
+/dist/
+/build/
+node_modules/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# PHPUnit run cache — machine state, regenerated every run.
+.phpunit.result.cache

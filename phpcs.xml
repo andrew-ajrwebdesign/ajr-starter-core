@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<ruleset name="AJR Starter Core">
+    <description>WordPress Coding Standards for AJR Starter Core.</description>
+
+    <!-- What to scan -->
+    <file>.</file>
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <exclude-pattern>/tests/*</exclude-pattern>
+    <!-- bin/ is Node tooling, not shipped PHP. -->
+    <exclude-pattern>/bin/*</exclude-pattern>
+
+    <!-- How to report -->
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <!-- WordPress ruleset -->
+    <rule ref="WordPress">
+        <!-- PSR-4 filenames deliberately do not follow WP filename conventions. The plugin
+             architecture standard requires one class per file, PSR-4 named. -->
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <!-- Short array syntax is standard modern PHP and used throughout WP Core. -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+        <!-- This scaffold explains itself at length; prose comments are not sentences. -->
+        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
+    </rule>
+
+    <!-- Enforce the correct text domain. Rename this alongside the four find-replaces in
+         the plugin header when forking for a client. -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="ajr-starter-core"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Google tag loaders must be inline in <head>, and this is the one place that is
+         true. gtag.js and the GTM snippet are loaders Google requires verbatim and as
+         early as possible; routing them through wp_enqueue_script() puts them behind the
+         rest of the queue and breaks the consent-mode ordering this file exists to get
+         right. Scoped to the one file so the rule still applies everywhere else. -->
+    <rule ref="WordPress.WP.EnqueuedResources.NonEnqueuedScript">
+        <exclude-pattern>/src/Google/Tags.php</exclude-pattern>
+    </rule>
+
+    <!-- Match the plugin header: Requires at least 6.7, Requires PHP 8.1. -->
+    <config name="minimum_supported_wp_version" value="6.7"/>
+    <config name="testVersion" value="8.1-"/>
+</ruleset>

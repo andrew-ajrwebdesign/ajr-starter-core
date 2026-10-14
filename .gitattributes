@@ -1,0 +1,23 @@
+# LF in the repository, always. `* -text` switched normalisation off, so a Windows
+# checkout could commit CRLF and turn every touched file into a whole-file diff.
+* text=auto eol=lf
+*.png binary
+
+# ⛔ Keep dev files out of `git archive`, which is how deploy-export.cmd builds the
+# FTP-ready folder. Without these, .gitignore and .gitattributes ship to the client's
+# server — harmless but untidy, and preflight blocks the export for it.
+/.gitattributes export-ignore
+/.gitignore    export-ignore
+/bin           export-ignore
+
+# Same rule, for the test and CI tooling. None of it is runtime code: shipping a tests/
+# directory and a CI workflow to a client's wp-content/plugins is noise at best, and at
+# worst it advertises the toolchain to anyone who can read the folder.
+/.github       export-ignore
+/tests         export-ignore
+/phpcs.xml     export-ignore
+/phpunit.xml   export-ignore
+/.wp-env.json  export-ignore
+
+# 2026-09-19: composer.json only feeds Composer tooling; the plugin loads through its own PSR-4 fallback autoloader.
+/composer.json export-ignore
